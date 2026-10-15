@@ -212,6 +212,7 @@
         <h1>t7eb no5rjo fi date ?</h1>
         <p id="doneText"></p>
       </section>
+      <audio id="music" src="Turned Away.mp3" loop preload="auto"></audio>
     </main>
 
     <script>
@@ -317,6 +318,25 @@
           document.body.appendChild(h);
         }
       });
+      var music = document.getElementById("music");
+music.volume = 0.6;
+
+function startMusic(){
+  music.play().then(removeBackups).catch(function(){});
+}
+function removeBackups(){
+  ["pointerdown","touchstart","keydown","wheel","scroll"].forEach(function(t){
+    window.removeEventListener(t, startMusic);
+  });
+}
+
+// 1) try right away when the page opens
+startMusic();
+
+// 2) if blocked, start on her very first touch, key press or scroll
+["pointerdown","touchstart","keydown","wheel","scroll"].forEach(function(t){
+  window.addEventListener(t, startMusic, { passive: true });
+});
     </script>
   </body>
 </html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>A question for you</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fbe9ee;
+        --card: #fff8fa;
+        --ink: #4a1830;
+        --soft: #8a5169;
+        --yes: #d6336c;
+        --yes-ink: #fff;
+        --no: #ead3dc;
+        --no-ink: #4a1830;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #2a0f1e;
+          --card: #3a1829;
+          --ink: #ffe3ec;
+          --soft: #d9a3b9;
+          --yes: #ff5c8a;
+          --yes-ink: #2a0f1e;
+          --no: #5a2a40;
+          --no-ink: #ffe3ec;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #2a0f1e;
+        --card: #3a1829;
+        --ink: #ffe3ec;
+        --soft: #d9a3b9;
+        --yes: #ff5c8a;
+        --yes-ink: #2a0f1e;
+        --no: #5a2a40;
+        --no-ink: #ffe3ec;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+        height: 100%;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "DM Sans", system-ui, sans-serif;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      main {
+        width: min(92vw, 460px);
+        background: var(--card);
+        border-radius: 28px;
+        padding: 40px 28px 36px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(214, 51, 108, 0.18);
+        position: relative;
+        z-index: 1;
+      }
+      .emoji {
+        font-size: 64px;
+        line-height: 1;
+        display: inline-block;
+        animation: beat 1.4s ease-in-out infinite;
+      }
+      h1 {
+        font-family: Caveat, cursive;
+        font-weight: 700;
+        font-size: clamp(38px, 10vw, 54px);
+        line-height: 1.05;
+        margin: 14px 0 8px;
+      }
+      p {
+        margin: 0 auto 28px;
+        color: var(--soft);
+        max-width: 34ch;
+        line-height: 1.5;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        align-items: center;
+        min-height: 64px;
+        flex-wrap: wrap;
+      }
+      button {
+        font: inherit;
+        font-weight: 600;
+        font-size: 18px;
+        border: 0;
+        border-radius: 999px;
+        padding: 14px 30px;
+        cursor: pointer;
+      }
+      button:focus-visible {
+        outline: 3px solid var(--ink);
+        outline-offset: 3px;
+      }
+      #yes {
+        background: var(--yes);
+        color: var(--yes-ink);
+        transition: transform 0.25s ease;
+        box-shadow: 0 8px 20px rgba(214, 51, 108, 0.35);
+      }
+      #yes:hover {
+        filter: brightness(1.05);
+      }
+      #no {
+        background: var(--no);
+        color: var(--no-ink);
+        transition: left 0.25s cubic-bezier(0.3, 1.5, 0.5, 1),
+          top 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+      }
+      #no.run {
+        position: fixed;
+        z-index: 5;
+      }
+      #msg {
+        min-height: 1.5em;
+        margin: 18px auto 0;
+        font-size: 15px;
+        color: var(--soft);
+        line-height: 1.2;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0.6);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.15);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      #done {
+        display: none;
+      }
+      .heart {
+        position: fixed;
+        bottom: -40px;
+        font-size: 28px;
+        pointer-events: none;
+        z-index: 9;
+        animation: rise 3.5s ease-in forwards;
+      }
+      @keyframes beat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.12);
+        }
+      }
+      @keyframes rise {
+        to {
+          transform: translateY(-110vh) rotate(25deg);
+          opacity: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .emoji {
+          animation: none;
+        }
+        .heart {
+          animation-duration: 0.01s;
+        }
+        #no,
+        #yes {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="ask">
+        <div class="emoji" aria-hidden="true">💌</div>
+        <h1 id="title"></h1>
+        <p>
+          gaddit el page ethya likk netyy inzl yes wratta7ni
+        </p>
+        <div class="row">
+          <button id="yes" type="button">Yes 💖</button>
+          <button id="no" type="button">No</button>
+        </div>
+        <p id="msg" aria-live="polite"></p>
+      </section>
+      <section id="done">
+        <div class="emoji" aria-hidden="true">🥰</div>
+        <h1>She said yes!</h1>
+        <p id="doneText"></p>
+      </section>
+    </main>
+
+    <script>
+      // ✏️ EDIT THESE:
+      var HER_NAME = "Farahh"; // her name or nickname
+      var MY_NAME = "Me"; // your name
+      // each try shows the next message, and it gets bigger and louder every time
+      var teases = [
+        "3lehhh",
+        "emchi barka",
+        "w3laaa zzzz",
+        "zidd 5amem",
+        "ntebch tetfarej fya wena nkawer?",
+        "bh bh mouch lezm , enzl NO mch bchteb3ed",
+        "😂😂😂😂",
+        "PLEASE press Yes 🥺",
+        "You know you love me!",
+        "PRESS YES ALREADY!!! 😤💖",
+      ];
+
+      var yes = document.getElementById("yes"),
+        no = document.getElementById("no"),
+        msg = document.getElementById("msg"),
+        scale = 1,
+        count = 0,
+        lastMove = 0;
+      document.getElementById("title").textContent =
+        HER_NAME + ", t7ebb twali the pretiest girl fi 7yeti ";
+      document.getElementById("doneText").textContent =
+        "🥹🥹🥹🥹 i love u so much babe" + MY_NAME;
+
+      function dodge(e) {
+        var now = Date.now();
+        if (now - lastMove < 120) return;
+        lastMove = now;
+        var w = no.offsetWidth,
+          h = no.offsetHeight,
+          vw = window.innerWidth,
+          vh = window.innerHeight,
+          x,
+          y,
+          tries = 0;
+        var px = e && e.clientX != null ? e.clientX : vw / 2,
+          py = e && e.clientY != null ? e.clientY : vh / 2;
+        do {
+          x = 10 + Math.random() * (vw - w - 20);
+          y = 10 + Math.random() * (vh - h - 20);
+          tries++;
+        } while (
+          tries < 20 &&
+          Math.hypot(x + w / 2 - px, y + h / 2 - py) < 160
+        );
+        no.classList.add("run");
+        no.style.left = x + "px";
+        no.style.top = y + "px";
+        count++;
+        msg.textContent = teases[Math.min(count - 1, teases.length - 1)];
+        msg.style.fontSize = Math.min(15 + count * 3, 42) + "px";
+        msg.style.fontWeight = count > 2 ? "700" : "400";
+        msg.style.color = count > 3 ? "var(--yes)" : "var(--soft)";
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          msg.style.animation = "none";
+          void msg.offsetWidth;
+          msg.style.animation = "pop .35s ease-out";
+        }
+        scale = Math.min(scale + 0.12, 2.2);
+        yes.style.transform = "scale(" + scale + ")";
+      }
+
+      // run away when the pointer gets close, or on touch / click / keyboard focus
+      document.addEventListener("pointermove", function (e) {
+        var r = no.getBoundingClientRect();
+        if (
+          Math.hypot(
+            e.clientX - (r.left + r.width / 2),
+            e.clientY - (r.top + r.height / 2)
+          ) < 90
+        )
+          dodge(e);
+      });
+      ["pointerdown", "touchstart", "click", "focus"].forEach(function (t) {
+        no.addEventListener(
+          t,
+          function (e) {
+            e.preventDefault();
+            dodge(e.touches ? e.touches[0] : e);
+          },
+          { passive: false }
+        );
+      });
+
+      yes.addEventListener("click", function () {
+        document.getElementById("ask").style.display = "none";
+        no.style.display = "none";
+        document.getElementById("done").style.display = "block";
+        for (var i = 0; i < 40; i++) {
+          var h = document.createElement("div");
+          h.className = "heart";
+          h.textContent = ["❤️", "💖", "💕", "💗"][i % 4];
+          h.style.left = Math.random() * 100 + "vw";
+          h.style.animationDelay = Math.random() * 1.5 + "s";
+          h.style.fontSize = 20 + Math.random() * 28 + "px";
+          document.body.appendChild(h);
+        }
+      });
+    </script>
+  </body>
+</html>
